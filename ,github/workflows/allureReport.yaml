@@ -1,0 +1,28 @@
+name: Deploy Allure Report
+
+on:
+  workflow_run:
+    workflows: ["Run Cypress Tests"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download Allure report artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: allure-report
+          path: allure-report
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
