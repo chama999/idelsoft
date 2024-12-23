@@ -1,43 +1,39 @@
-name: Run Cypress Tests
+name: Cypress Tests
 
-# Triggers the workflow on push or pull request events
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        browser: [chrome, firefox, edge]
-
     steps:
-      # Step to check out the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      # Step to set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '14'
 
-      # Step to install dependencies
       - name: Install dependencies
         run: npm install
 
-      # Step to run Cypress tests on different browsers
       - name: Run Cypress tests
-        run: npx cypress run --browser ${{ matrix.browser }}
+        run: npx cypress run
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
-      # Step to generate Allure report
       - name: Generate Allure report
-        run: |
-          npx allure generate allure-results --clean -o allure-report
+        run: npx allure generate --clean
 
-      # Step to upload Allure report as an artifact
-      - name: Upload Allure report artifact
-        uses: actions/upload-artifact@v3
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: allure-report
-          path: allure-report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
