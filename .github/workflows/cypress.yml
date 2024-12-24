@@ -15,9 +15,9 @@ jobs:
         with:
           browser: chrome  # 'chrome', 'firefox', 'edge', 'electron', 'safari'
           headless: true
-        - name: Generate report
-          run: npx mochaawesome mochawesome-report.json
-        - name: Publish report
-          uses: actions/upload-artifact@v4
-          with:
-            name: mochawesome-report
+      - name: Generate report
+        run: npx mochaawesome mochawesome-report.json
+      - name: Publish report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
