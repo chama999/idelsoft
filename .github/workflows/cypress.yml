@@ -25,9 +25,3 @@ jobs:
         with:
           name: mochawesome-report
           path: ./cypress/results/output.html
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@3.7.1
-        with:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          BRANCH: gh-pages
-          FOLDER: cypress/results
