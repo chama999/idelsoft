@@ -5,33 +5,16 @@ on: push
 jobs:
   ## Run Cypress tests
   cypress-run:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        browser: [chrome, firefox, edge]
+    runs-on: chrome
+    os: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          browser: ${{ matrix.browser }}  # 'chrome', 'firefox', 'edge', 'electron', 'safari'
+          browser: chrome  # 'chrome', 'firefox', 'edge', 'electron', 'safari'
           headless: true
-
-## After each cypress-run for all the browser executed, I need to configure a mochaawesome report and generate a github page.
-  mochaawesome-report:
-      runs-on: ubuntu-latest
-      needs: cypress-run
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-        - name: Setup Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version: '22'
-        - name: Install dependencies
-          run: npm install
         - name: Generate report
           run: npx mochaawesome mochawesome-report.json
         - name: Publish report
