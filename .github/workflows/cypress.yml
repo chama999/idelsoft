@@ -5,7 +5,7 @@ on: push
 jobs:
   ## Run Cypress tests
   cypress-run:
-    runs-on: chrome  
+    runs-on: ubuntu-latest  
     steps:
       - name: Checkout
         uses: actions/checkout@v4
