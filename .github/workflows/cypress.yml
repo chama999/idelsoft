@@ -3,19 +3,19 @@ name: Cypress Tests
 on: push
 
 jobs:
-  ## Run Cypress tests
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
         uses: actions/checkout@v4
-    - name: Cypress run
+      - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           browser: chrome  # 'chrome', 'firefox', 'edge', 'electron', 'safari'
           headless: true
-    - name: Generate report
+      - name: Generate report
         run: npx mochaawesome mochawesome-report.json
-    - name: Publish report
+      - name: Publish report
         uses: actions/upload-artifact@v4
         with:
           name: mochawesome-report
