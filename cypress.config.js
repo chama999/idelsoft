@@ -1,5 +1,5 @@
 const { defineConfig } = require("cypress");
-const dotenv = require("dotenv").config() //load environment variables:
+const dotenv = require("dotenv").config() //load environment variables from .env file
 
 module.exports = defineConfig({
   e2e: {
@@ -9,5 +9,13 @@ module.exports = defineConfig({
       require('@shelex/cypress-allure-plugin/writer')(on, config);
       return config;
     },
+    video: true,
+    videoUploadOnPasses: true,
+    screenshots: true,
+    trashAssetsBeforeRuns: false,
+    reporter: '@shelex/cypress-allure-plugin',
+    reporterOptions: {
+      debug: true,
+    }
   },
 });
