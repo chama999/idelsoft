@@ -19,6 +19,13 @@ module.exports = defineConfig({
       config.env.CYPRESS_ENVIRONMENT = process.env.CYPRESS_ENVIRONMENT
       return config;
     },
+    reporter: 'mochawesome',
+    reporterOptions: {
+      reportDir: './cypress/results', 
+      overwrite: true,
+      html: true,
+      json: true 
+    },
     video: true,
     screenshots: true,
     trashAssetsBeforeRuns: false,

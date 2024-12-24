@@ -19,37 +19,22 @@ jobs:
           browser: ${{ matrix.browser }}  # 'chrome', 'firefox', 'edge', 'electron', 'safari'
           headless: true
 
-  ## For each execution of cypress-run job it should upload the report into github pages
-
-  allure-report:
-    runs-on: ubuntu-latest
-    if: always()
-    needs: cypress-run
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download Allure report artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-report
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install Allure commandline
-        run: |
-          sudo apt-add-repository ppa:qameta/allure -y
-          sudo apt-get update
-          sudo apt-get install allure -y
-
-      - name: Serve Allure report
-        run: |
-          allure serve allure-report
-
-      - name: Upload Allure report
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
+## After each cypress-run for all the browser executed, I need to configure a mochaawesome report and generate a github page.
+  mochaawesome-report:
+      runs-on: ubuntu-latest
+      needs: cypress-run
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22'
+        - name: Install dependencies
+          run: npm install
+        - name: Generate report
+          run: npx mochaawesome mochawesome-report.json
+        - name: Publish report
+          uses: actions/upload-artifact@v4
+          with:
+            name: mochawesome-report
