@@ -22,8 +22,7 @@ jobs:
           browser: ${{ matrix.browser }}  # 'chrome', 'firefox', 'edge', 'electron', 'safari'
           headless: true
 
-  ## Add allure report job into github pages, it will run after each cypress-run job
-
+  ## For each execution of cypress-run job it should upload the report into github pages
   allure-report:
     runs-on: ubuntu-latest
     needs: cypress-run
@@ -33,5 +32,25 @@ jobs:
 
       - name: Download Allure report artifact
         uses: actions/download-artifact@v3
+        with:
+          name: allure-report
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Allure commandline
+        run: |
+          sudo apt-add-repository ppa:qameta/allure -y
+          sudo apt-get update
+          sudo apt-get install allure -y
+
+      - name: Serve Allure report
+        run: |
+          allure serve allure-report
+
+      - name: Upload Allure report
+        uses: actions/upload-artifact@v2
         with:
           name: allure-report
