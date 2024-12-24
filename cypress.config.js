@@ -2,6 +2,7 @@ const { defineConfig } = require("cypress");
 const dotenv = require("dotenv").config() //load environment variables from .env file
 
 module.exports = defineConfig({
+  projectId: "idelsoft-gh-automation",
   e2e: {
     setupNodeEvents(on, config) {
       config.env.BASE_URL = process.env.BASE_URL
