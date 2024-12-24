@@ -23,6 +23,16 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import LoginPage from '../support/pages/loginPage'  
+import CreateAccountPage from '../support/pages/createAccountPage'
+import AccountPage from '../support/pages/accountPage'
+const loginPage = new LoginPage()
+const createAccountPage = new CreateAccountPage()
+const accountPage = new AccountPage()
 
-Cypress.Commands.add('Create new account', (email, password) => {
+Cypress.Commands.add('createNewAccountCommand', () => {
+    loginPage.visit()
+    loginPage.createAccount()
+    createAccountPage.createNewAccout() 
+    cy.get(accountPage.locators.successMessageArea).should('contain', 'Thank you for registering with Main Website Store.');
 })
