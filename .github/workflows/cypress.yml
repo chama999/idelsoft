@@ -21,7 +21,6 @@ jobs:
         with:
           browser: ${{ matrix.browser }}  # 'chrome', 'firefox', 'edge', 'electron', 'safari'
           headless: true
-          record: true
 
   ## Add allure report job into github pages, it will run after each cypress-run job
 
