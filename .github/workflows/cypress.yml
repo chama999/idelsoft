@@ -20,8 +20,10 @@ jobs:
           headless: true
 
   ## For each execution of cypress-run job it should upload the report into github pages
+
   allure-report:
     runs-on: ubuntu-latest
+    if: always()
     needs: cypress-run
     steps:
       - name: Checkout repository
