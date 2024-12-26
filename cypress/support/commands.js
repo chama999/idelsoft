@@ -29,10 +29,31 @@ import AccountPage from '../support/pages/accountPage'
 const loginPage = new LoginPage()
 const createAccountPage = new CreateAccountPage()
 const accountPage = new AccountPage()
+const BASE_API_URL = Cypress.env('BASE_API_URL') || 'https://magento.softwaretestingboard.com/rest/default'
 
 Cypress.Commands.add('createNewAccountCommand', () => {
     loginPage.visit()
     loginPage.createAccount()
     createAccountPage.createNewAccout() 
     cy.get(accountPage.locators.successMessageArea).should('contain', 'Thank you for registering with Main Website Store.');
+})
+
+Cypress.Commands.add('getTokenAPI', () => {
+    cy.request({
+        method: 'POST',
+        url: BASE_API_URL + '/V1/integration/customer/token/',
+        body: {
+            "username": "jdoe@example999.com",
+            "password": "Password1"
+        },
+        failOnStatusCode: false
+    }).then((response) => {
+        if (response.status === 200) {
+            cy.wrap(response.body);
+        } else {
+            cy.log('Request failed with status: ' + response.status);
+            cy.log('Response body: ' + JSON.stringify(response.body));
+            throw new Error('Failed to get token');
+        }
+    })
 })
